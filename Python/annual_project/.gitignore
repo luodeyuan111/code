@@ -1,0 +1,10 @@
+# 忽略虚拟环境（不管是venv还是env）
+venv/
+env/
+.venv/
+
+# 忽略Python的缓存文件（那些乱七八糟的文件夹）
+__pycache__/
+
+# 忽略VS Code的个人配置
+.vscode/
