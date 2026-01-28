@@ -6,9 +6,11 @@ import os
 import time
 
 class RGBDataExtractor:
-    def __init__(self, drone_name="Drone1"):
+    def __init__(self, drone_name="Drone1", save_images=True):
         """初始化RGB数据提取器"""
         self.drone_name = drone_name
+        # 是否将每次捕获的图像保存到磁盘（连续实时显示时可设为False）
+        self.save_images = save_images
         self.client = airsim.MultirotorClient()  # 连接AirSim
         self.client.confirmConnection()  # 确认连接
         self.client.enableApiControl(True, vehicle_name=drone_name)  # 启用API控制
@@ -47,8 +49,9 @@ class RGBDataExtractor:
                 response = responses[0]
                 img_rgb = self._process_rgb_image(response)
 
-                # 保存图像到本地
-                self._save_rgb_image(img_rgb, cam_name, timestamp)
+                # 根据配置决定是否保存图像到本地
+                if self.save_images:
+                    self._save_rgb_image(img_rgb, cam_name, timestamp)
 
                 # 存储数据（可选，供实时处理）
                 rgb_data[cam_name] = img_rgb
