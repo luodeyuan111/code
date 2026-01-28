@@ -56,7 +56,6 @@ class RGBDataExtractor:
                 # 存储数据（可选，供实时处理）
                 rgb_data[cam_name] = img_rgb
 
-                print(f"成功捕获相机{cam_name}的RGB图像")
             except Exception as e:
                 print(f"错误：捕获相机{cam_name}数据失败 - {str(e)}")
 
@@ -107,8 +106,21 @@ def main():
         # 断开连接
         extractor.disconnect()
 
+
+
+class FrameBuffer:
+    def __init__(self):
+        self.frame_t = None
+        self.frame_t_plus_1 = None
+    def update(self, new_frame):
+        self.frame_t = self.frame_t_plus_1
+        self.frame_t_plus_1 = new_frame
+    def get_frames(self):
+        return self.frame_t, self.frame_t_plus_1
+
 if __name__ == "__main__":
     main()
+
 #RGBDataExtractor类：封装了RGB数据提取的核心功能，包括连接AirSim、捕获图像、处理和保存数据。
 
 #capture_rgb_images方法：遍历所有相机，发送图像请求，处理并返回RGB数据。
@@ -116,3 +128,5 @@ if __name__ == "__main__":
 #process_rgb_image方法：将AirSim返回的字节流转换为OpenCV可处理的RGB格式（解决BGR转RGB的问题）。
 
 #_save_rgb_image方法：将RGB图像保存为PNG文件（文件名包含相机名称和时间戳，便于后续检索）。
+
+#class FrameBuffer：用于存储和管理连续两帧图像数据的简单缓冲区类。
